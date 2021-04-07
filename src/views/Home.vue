@@ -6,7 +6,7 @@
         xl="2"
         lg="3"
         md="4"
-        sm="2"
+        sm="6"
         xs="1"
         v-for="board of boards"
         :key="board.id"
@@ -17,16 +17,22 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-btn elevation="2" large fab fixed color="pink" dark bottom right>
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+    <board-form @click:save="addBoard" />
   </div>
 </template>
 
 <script>
 export default {
   name: "Home",
-  components: {},
+  components: {
+    "board-form": require("@/components/BoardForm.vue").default,
+  },
+  methods: {
+    addBoard(board) {
+      board.id = Date.now();
+      this.boards.push(board);
+    },
+  },
   data: () => ({
     boards: [
       {
