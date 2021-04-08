@@ -11,7 +11,7 @@
         v-for="board of boards"
         :key="board.id"
       >
-        <v-card elevation="2" class="card">
+        <v-card elevation="2" class="card" :to="`board/${board.id}`">
           <v-card-title>{{ board.name }}</v-card-title>
           <v-card-text>{{ board.description }}</v-card-text>
         </v-card>
@@ -28,65 +28,20 @@ export default {
     "board-form": require("@/components/BoardForm.vue").default,
   },
   methods: {
-    addBoard(board) {
-      board.id = Date.now();
-      this.boards.push(board);
+    async addBoard(board) {
+      const response = await this.$http.post("/boards", board);
+      this.boards.push(response.data);
+    },
+    async getBoardsList() {
+      const response = await this.$http.get("/boards");
+      this.boards = response.data;
     },
   },
+  async mounted() {
+    await this.getBoardsList();
+  },
   data: () => ({
-    boards: [
-      {
-        id: 1,
-        name: "Trello Clone",
-        description: "Um clone do Trello, só que muito melhor.",
-        progress: 23.5,
-      },
-      {
-        id: 2,
-        name: "Lorem ipsum dolor sit amet,",
-        description:
-          "uspendisse at nisi at diam viverra maximus quis in est. Sed at vulputate mauris.",
-        progress: 15,
-      },
-      {
-        id: 3,
-        name: " bibendum consectetur arcu",
-        description:
-          "Nulla facilisi. Curabitur pellentesque eu sapien sit amet dictum.",
-        progress: 55,
-      },
-      {
-        id: 4,
-        name: "Suspendisse at nisi at diam",
-        description: "Nunc accumsan neque tincidunt rutrum consectetur.",
-        progress: 0,
-      },
-      {
-        id: 5,
-        name: "Suspendisse facilisis mauris metus",
-        description: " Quisque finibus sit amet lorem a gravida",
-        progress: 73,
-      },
-      {
-        id: 6,
-        name: "Curabitur rhoncus id",
-        description: "Sed vitae nisl placerat, varius sapien ut, sagittis erat",
-        progress: 28,
-      },
-      {
-        id: 7,
-        name: "Ut vestibulum velit nec",
-        description:
-          "Duis pellentesque quam lacus, a viverra magna ornare sit amet.",
-        progress: 48,
-      },
-      {
-        id: 8,
-        name: "Aenean nec lacus",
-        description: "In quis eros malesuada, rutrum magna id, feugiat nisl",
-        progress: 36,
-      },
-    ],
+    boards: [],
   }),
 };
 </script>
