@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="value == `todo`">
+    <div v-if="value === `todo`">
       <tasks-cards :tasks-list="todoList" list-name="TO DO" />
     </div>
-    <div v-if="value == `doing`">
+    <div v-if="value === `doing`">
       <tasks-cards :tasks-list="doingList" list-name="DOING" />
     </div>
-    <div v-if="value == `done`">
+    <div v-if="value === `done`">
       <tasks-cards :tasks-list="doneList" list-name="DONE" />
     </div>
     <v-bottom-navigation v-model="value" fixed>

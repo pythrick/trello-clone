@@ -7,7 +7,11 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Trello Clone</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link to="/" tag="button"
+          >Trello Clone</router-link
+        ></v-toolbar-title
+      >
     </v-app-bar>
 
     <v-main>
