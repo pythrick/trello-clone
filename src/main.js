@@ -6,7 +6,7 @@ import axios from "axios";
 
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios.create({
-  baseURL: `http://localhost:8000`,
+  baseURL: `${window.location.protocol}//${window.location.hostname}:8000`,
 });
 
 new Vue({

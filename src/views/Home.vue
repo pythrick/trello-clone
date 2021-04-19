@@ -8,48 +8,36 @@
         md="4"
         sm="6"
         xs="1"
-        v-for="board of boards"
-        :key="board.id"
+        v-for="project of projects"
+        :key="project.id"
       >
-        <v-card elevation="2" class="card" :to="`board/${board.id}`">
-          <v-card-title>{{ board.name }}</v-card-title>
-          <v-card-text>{{ board.description }}</v-card-text>
-          <v-card-actions v-on:click.prevent>
+        <v-card elevation="2" class="card" :to="`project/${project.id}`">
+          <v-card-title>{{ project.name }}</v-card-title>
+          <v-card-text>{{ project.description }}</v-card-text>
+          <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn icon @click="editBoard(board)">
+            <v-btn icon @click.prevent @click="editProject(project)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
+            <!--            <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>-->
           </v-card-actions>
           <v-progress-linear
             top
             absolute
             rounded
-            :value="board.progress * 100"
-            :color="getProgressColor(board)"
+            :value="project.progress * 100"
+            :color="getProgressColor(project)"
           ></v-progress-linear>
         </v-card>
       </v-col>
     </v-row>
-    <board-form
+    <project-form
       :dialog="formOpen"
-      :board="currentBoard"
+      :project="currentProject"
       @click:close="closeForm"
-      @click:save="saveBoard"
+      @click:save="saveProject"
     />
-    <v-btn
-      elevation="2"
-      large
-      fab
-      fixed
-      color="pink"
-      dark
-      bottom
-      right
-      @click="formOpen = true"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+    <fabutton color="pink" @click.native="formOpen = true" />
   </div>
 </template>
 
@@ -57,42 +45,43 @@
 export default {
   name: "Home",
   components: {
-    "board-form": require("@/components/BoardForm.vue").default,
+    "project-form": require("@/components/ProjectForm.vue").default,
+    fabutton: require("@/components/FAButton.vue").default,
   },
   methods: {
-    async editBoard(board) {
+    async editProject(project) {
       this.formOpen = true;
-      this.currentBoard = Object.assign({}, board);
+      this.currentProject = Object.assign({}, project);
     },
     async closeForm() {
       this.formOpen = false;
     },
-    async saveBoard(board) {
-      if (board.id) {
-        await this.$http.patch(`/boards/${board.id}`, board);
-        const boardIndex = this.boards.findIndex(
-          (item) => item.id === board.id
+    async saveProject(project) {
+      if (project.id) {
+        await this.$http.patch(`/projects/${project.id}`, project);
+        const projectIndex = this.projects.findIndex(
+          (item) => item.id === project.id
         );
-        const newBoardsList = [...this.boards];
-        newBoardsList[boardIndex] = {
-          ...newBoardsList[boardIndex],
-          name: board.name,
-          description: board.description,
+        const newProjectsList = [...this.projects];
+        newProjectsList[projectIndex] = {
+          ...newProjectsList[projectIndex],
+          name: project.name,
+          description: project.description,
         };
-        this.boards = newBoardsList;
+        this.projects = newProjectsList;
       } else {
-        const response = await this.$http.post("/boards", board);
-        this.boards.push(response.data);
+        const response = await this.$http.post("/projects", project);
+        this.projects.unshift(response.data);
       }
     },
-    async getBoardsList() {
-      const response = await this.$http.get("/boards");
-      this.boards = response.data;
+    async getProjectsList() {
+      const response = await this.$http.get("/projects");
+      this.projects = response.data;
     },
-    getProgressColor(board) {
-      if (board.progress < 0.5) {
+    getProgressColor(project) {
+      if (project.progress < 0.5) {
         return "primary";
-      } else if (board.progress < 0.7) {
+      } else if (project.progress < 0.7) {
         return "yellow";
       } else {
         return "green";
@@ -100,12 +89,12 @@ export default {
     },
   },
   async mounted() {
-    await this.getBoardsList();
+    await this.getProjectsList();
   },
   data: () => ({
-    boards: [],
+    projects: [],
     formOpen: false,
-    currentBoard: {
+    currentProject: {
       id: null,
       name: "",
       description: "",

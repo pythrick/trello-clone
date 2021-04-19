@@ -12,7 +12,11 @@
         v-for="item of tasksList"
         :key="item.id"
       >
-        <v-card elevation="2" class="card">
+        <v-card
+          elevation="2"
+          class="card"
+          @click="$emit('click:card', Object.assign({}, item))"
+        >
           <v-card-title>{{ item.name }}</v-card-title>
           <v-card-text>{{ item.description }}</v-card-text>
         </v-card>
@@ -23,7 +27,7 @@
 
 <script>
 export default {
-  name: "TasksCards",
+  name: "TasksTasks",
   props: ["tasksList", "listName"],
 };
 </script>

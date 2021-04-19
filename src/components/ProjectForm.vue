@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{
-            board.id ? "Edit board" : "Add new board"
+            project.id ? "Edit project" : "Add new project"
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -12,14 +12,14 @@
             <v-row>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
-                  v-model="board.name"
+                  v-model="project.name"
                   label="Name*"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
-                  v-model="board.description"
+                  v-model="project.description"
                   label="Description"
                 ></v-text-field>
               </v-col>
@@ -32,7 +32,9 @@
           <v-btn color="blue darken-1" text @click="closeDialog()">
             Close
           </v-btn>
-          <v-btn color="blue darken-1" text @click="saveBoard()"> Save </v-btn>
+          <v-btn color="blue darken-1" text @click="saveProject()">
+            Save
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -41,21 +43,22 @@
 
 <script>
 export default {
+  name: "ProjectForm",
   data: () => ({}),
-  props: ["dialog", "board"],
+  props: ["dialog", "project"],
   methods: {
     async closeDialog() {
       await this.$emit("click:close");
       await this.resetForm();
     },
-    async saveBoard() {
-      await this.$emit("click:save", Object.assign({}, this.board));
+    async saveProject() {
+      await this.$emit("click:save", Object.assign({}, this.project));
       await this.closeDialog();
     },
     async resetForm() {
-      this.board.id = null;
-      this.board.name = "";
-      this.board.description = "";
+      this.project.id = null;
+      this.project.name = "";
+      this.project.description = "";
     },
   },
 };
