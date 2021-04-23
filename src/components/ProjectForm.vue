@@ -20,9 +20,23 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   v-model="project.description"
-                  label="Description"
+                  label="Description*"
+                  required
                 ></v-text-field>
               </v-col>
+
+              <v-color-picker
+                v-model="color"
+                class="mx-auto"
+                hide-canvas
+                hide-inputs
+                hide-sliders
+                hide-mode-switch
+                swatches-max-height="300"
+                mode="hexa"
+                :swatches="swatches"
+                show-swatches
+              ></v-color-picker>
             </v-row>
           </v-container>
           <small>*indicates required field</small>
@@ -44,8 +58,22 @@
 <script>
 export default {
   name: "ProjectForm",
-  data: () => ({}),
+  data: () => ({
+    swatches: [["#EF5350"], ["#EC407A"], ["#9FA8DA"], ["#66BB6A"]],
+  }),
   props: ["dialog", "project"],
+  computed: {
+    color: {
+      // getter
+      get: function () {
+        return this.project.color;
+      },
+      // setter
+      set: function (newValue) {
+        this.project.color = newValue.hexa;
+      },
+    },
+  },
   methods: {
     async closeDialog() {
       await this.$emit("click:close");
@@ -59,6 +87,7 @@ export default {
       this.project.id = null;
       this.project.name = "";
       this.project.description = "";
+      this.project.color = "#EF5350";
     },
   },
 };

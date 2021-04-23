@@ -11,7 +11,12 @@
         v-for="project of projects"
         :key="project.id"
       >
-        <v-card elevation="2" class="card" :to="`project/${project.id}`">
+        <v-card
+          elevation="2"
+          class="card"
+          :to="`project/${project.id}`"
+          :color="project.color"
+        >
           <v-card-title>{{ project.name }}</v-card-title>
           <v-card-text>{{ project.description }}</v-card-text>
           <v-card-actions>
@@ -67,6 +72,7 @@ export default {
           ...newProjectsList[projectIndex],
           name: project.name,
           description: project.description,
+          color: project.color,
         };
         this.projects = newProjectsList;
       } else {

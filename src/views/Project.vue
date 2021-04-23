@@ -1,41 +1,91 @@
 <template>
   <div>
-    <div v-if="value === `TODO`">
-      <tasks-cards
-        :tasks-list="todoList"
-        list-name="TO DO"
-        @click:card="editTask"
+    <v-row class="d-none d-sm-flex d-md-flex">
+      <v-col cols="12" sm="4">
+        <v-sheet rounded="lg" min-height="70vh">
+          <div class="container">
+            <tasks-cards
+              :tasks-list="todoList"
+              list-name="TO DO"
+              @click:card="editTask"
+            />
+          </div>
+        </v-sheet>
+      </v-col>
+
+      <v-col cols="12" sm="4">
+        <v-sheet min-height="70vh" rounded="lg">
+          <div class="container">
+            <tasks-cards
+              :tasks-list="doingList"
+              list-name="Doing"
+              @click:card="editTask"
+            />
+          </div>
+        </v-sheet>
+      </v-col>
+
+      <v-col cols="12" sm="4">
+        <v-sheet rounded="lg" min-height="70vh">
+          <div class="container">
+            <tasks-cards
+              :tasks-list="doneList"
+              list-name="Done"
+              @click:card="editTask"
+            />
+          </div>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row class="d-sm-none">
+      <v-container v-if="value === `TODO`">
+        <v-sheet rounded="lg" min-height="70vh" class="pa-4">
+          <tasks-cards
+            :tasks-list="todoList"
+            list-name="TO DO"
+            @click:card="editTask"
+          />
+        </v-sheet>
+      </v-container>
+
+      <v-container v-if="value === `DOING`">
+        <v-sheet rounded="lg" min-height="70vh" class="pa-4">
+          <tasks-cards :tasks-list="doingList" list-name="DOING" />
+        </v-sheet>
+      </v-container>
+
+      <v-container v-if="value === `DONE`">
+        <v-sheet rounded="lg" min-height="70vh" class="pa-4">
+          <tasks-cards :tasks-list="doneList" list-name="DONE" />
+        </v-sheet>
+      </v-container>
+    </v-row>
+
+    <v-row class="d-sm-none">
+      <v-bottom-navigation v-model="value" fixed>
+        <v-btn value="TODO">
+          <span>To do</span>
+          <v-icon>mdi-playlist-plus</v-icon>
+        </v-btn>
+
+        <v-btn value="DOING">
+          <span>Doing</span>
+          <v-icon>mdi-list-status</v-icon>
+        </v-btn>
+
+        <v-btn value="DONE">
+          <span>Done</span>
+          <v-icon>mdi-playlist-check</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+      <fabutton color="green" @click.native="formOpen = true" />
+      <task-form
+        :dialog="formOpen"
+        :task="currentTask"
+        @click:close="closeForm"
+        @click:save="saveTask"
       />
-    </div>
-    <div v-if="value === `DOING`">
-      <tasks-cards :tasks-list="doingList" list-name="DOING" />
-    </div>
-    <div v-if="value === `DONE`">
-      <tasks-cards :tasks-list="doneList" list-name="DONE" />
-    </div>
-    <v-bottom-navigation v-model="value" fixed>
-      <v-btn value="TODO">
-        <span>To do</span>
-        <v-icon>mdi-playlist-plus</v-icon>
-      </v-btn>
-
-      <v-btn value="DOING">
-        <span>Doing</span>
-        <v-icon>mdi-list-status</v-icon>
-      </v-btn>
-
-      <v-btn value="DONE">
-        <span>Done</span>
-        <v-icon>mdi-playlist-check</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
-    <fabutton color="green" @click.native="formOpen = true" />
-    <task-form
-      :dialog="formOpen"
-      :task="currentTask"
-      @click:close="closeForm"
-      @click:save="saveTask"
-    />
+    </v-row>
   </div>
 </template>
 
